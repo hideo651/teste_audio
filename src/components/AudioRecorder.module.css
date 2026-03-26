@@ -1,0 +1,280 @@
+/* ─────────────────────────────────────────────
+   AudioRecorder.module.css
+   Aesthetic: editorial minimalism
+   Fonts: Playfair Display (title) + DM Mono (labels/status)
+   Import in index.html or main entry:
+     <link rel="preconnect" href="https://fonts.googleapis.com" />
+     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+───────────────────────────────────────────── */
+
+/* ── Tokens ─────────────────────────────────── */
+:root {
+  --bg: #f5f3ef; /* warm off-white */
+  --surface: #ffffff;
+  --border: #e2ded8;
+  --text: #1c1917;
+  --muted: #9c9087;
+  --accent: #c0442a; /* terracotta — used ONLY for recording state */
+  --accent-soft: #f5e9e6;
+  --radius: 2px;
+  --transition: 220ms ease;
+}
+
+/* ── Page shell ──────────────────────────────── */
+.page {
+  min-height: 100vh;
+  background-color: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  font-family: "DM Mono", monospace;
+}
+
+/* ── Card ────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 3.5rem 3rem;
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+
+  /* entrance animation */
+  animation: cardIn 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Header ──────────────────────────────────── */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.title {
+  font-family: "Playfair Display", Georgia, serif;
+  font-weight: 500;
+  font-size: 1.65rem;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+/* ── Status indicator ────────────────────────── */
+.statusRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 1.4rem;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+  transition: background var(--transition);
+}
+
+.dot.recording {
+  background: var(--accent);
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+.dot.paused {
+  background: var(--accent);
+  opacity: 0.45;
+}
+
+.dot.stopped {
+  background: var(--text);
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+}
+
+.statusText {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color var(--transition);
+}
+
+.statusText.recording {
+  color: var(--accent);
+}
+
+/* ── Controls ────────────────────────────────── */
+.controls {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* Base button */
+.btn {
+  font-family: "DM Mono", monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: var(--radius);
+  padding: 0.75rem 1.4rem;
+  border: 1px solid transparent;
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    color var(--transition),
+    transform 80ms ease;
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+/* Primary — used for Start / New recording */
+.btnPrimary {
+  background: var(--text);
+  color: var(--surface);
+  border-color: var(--text);
+}
+
+.btnPrimary:hover {
+  background: #3c3835;
+  border-color: #3c3835;
+}
+
+/* Ghost — used for Pause / Resume */
+.btnGhost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.btnGhost:hover {
+  border-color: var(--text);
+}
+
+/* Danger — used for Stop */
+.btnDanger {
+  background: transparent;
+  color: var(--accent);
+  border-color: #ebc9c2;
+}
+
+.btnDanger:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+/* ── Error message ───────────────────────────── */
+.error {
+  font-size: 0.72rem;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid #ebc9c2;
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+}
+
+/* ── Playback section ────────────────────────── */
+.playback {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
+
+  animation: fadeUp 350ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.playbackLabel {
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* Native audio element — stripped and restyled */
+.audioPlayer {
+  width: 100%;
+  height: 36px;
+  border-radius: var(--radius);
+  outline: none;
+  accent-color: var(--text);
+}
+
+/* Download link */
+.downloadLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1px;
+  width: fit-content;
+  transition:
+    color var(--transition),
+    border-color var(--transition);
+}
+
+.downloadLink:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.downloadLink::before {
+  content: "↓";
+  font-style: normal;
+}
